@@ -1,10 +1,11 @@
 import { api } from "@pr-round-robbin/backend/convex/_generated/api";
 import type { Doc } from "@pr-round-robbin/backend/convex/_generated/dataModel";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
-import { UserCircle, Users } from "lucide-react";
+import { Monitor, UserCircle, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,25 +13,46 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { selectTeamId } from "@/lib/use-selected-team";
 
 export function TeamCard({ team }: { team: Doc<"teams"> }) {
   const onCallMember = useQuery(api.onCall.getForTeam, { teamId: team._id });
   const members = useQuery(api.members.listByTeam, { teamId: team._id });
+  const navigate = useNavigate();
 
   return (
     <Link to="/teams/$teamId" params={{ teamId: team._id }}>
-      <Card className="transition-colors hover:bg-muted/50 cursor-pointer">
+      <Card className="group transition-colors hover:bg-muted/50 cursor-pointer">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Users className="size-4 text-muted-foreground" />
               {team.name}
             </CardTitle>
-            {members !== undefined && (
-              <Badge variant="secondary">
-                {members.length} {members.length === 1 ? "member" : "members"}
-              </Badge>
-            )}
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="ghost"
+                size="icon-xs"
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  selectTeamId(team._id);
+                  navigate({
+                    to: "/display/$teamId",
+                    params: { teamId: team._id },
+                  });
+                }}
+              >
+                <Monitor />
+              </Button>
+              {members !== undefined && (
+                <Badge variant="secondary">
+                  {members.length}{" "}
+                  {members.length === 1 ? "member" : "members"}
+                </Badge>
+              )}
+            </div>
           </div>
         </CardHeader>
         <CardContent>

@@ -1,12 +1,19 @@
 import { api } from "@pr-round-robbin/backend/convex/_generated/api";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 
 import { CreateTeamDialog } from "@/components/create-team-dialog";
 import { TeamCard } from "@/components/team-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSelectedTeamId } from "@/lib/use-selected-team";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    const teamId = getSelectedTeamId();
+    if (teamId) {
+      throw redirect({ to: "/display/$teamId", params: { teamId } });
+    }
+  },
   component: DashboardPage,
 });
 

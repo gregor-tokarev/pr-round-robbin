@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TeamsTeamIdRouteImport } from './routes/teams/$teamId'
+import { Route as DisplayTeamIdRouteImport } from './routes/display.$teamId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +23,39 @@ const TeamsTeamIdRoute = TeamsTeamIdRouteImport.update({
   path: '/teams/$teamId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DisplayTeamIdRoute = DisplayTeamIdRouteImport.update({
+  id: '/display/$teamId',
+  path: '/display/$teamId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/display/$teamId': typeof DisplayTeamIdRoute
   '/teams/$teamId': typeof TeamsTeamIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/display/$teamId': typeof DisplayTeamIdRoute
   '/teams/$teamId': typeof TeamsTeamIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/display/$teamId': typeof DisplayTeamIdRoute
   '/teams/$teamId': typeof TeamsTeamIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/teams/$teamId'
+  fullPaths: '/' | '/display/$teamId' | '/teams/$teamId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/teams/$teamId'
-  id: '__root__' | '/' | '/teams/$teamId'
+  to: '/' | '/display/$teamId' | '/teams/$teamId'
+  id: '__root__' | '/' | '/display/$teamId' | '/teams/$teamId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DisplayTeamIdRoute: typeof DisplayTeamIdRoute
   TeamsTeamIdRoute: typeof TeamsTeamIdRoute
 }
 
@@ -65,11 +75,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamsTeamIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/display/$teamId': {
+      id: '/display/$teamId'
+      path: '/display/$teamId'
+      fullPath: '/display/$teamId'
+      preLoaderRoute: typeof DisplayTeamIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DisplayTeamIdRoute: DisplayTeamIdRoute,
   TeamsTeamIdRoute: TeamsTeamIdRoute,
 }
 export const routeTree = rootRouteImport

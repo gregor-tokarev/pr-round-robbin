@@ -1,10 +1,10 @@
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
-import type { MutationCtx } from "./_generated/server";
+import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { internalMutation, query } from "./_generated/server";
 
-async function isMemberOnVacation(
-  ctx: { db: MutationCtx["db"] },
+export async function isMemberOnVacation(
+  ctx: { db: QueryCtx["db"] },
   memberId: Id<"members">,
   date: string,
 ) {

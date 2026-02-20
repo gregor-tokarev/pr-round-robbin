@@ -12,6 +12,7 @@ import type * as crons from "../crons.js";
 import type * as healthCheck from "../healthCheck.js";
 import type * as members from "../members.js";
 import type * as onCall from "../onCall.js";
+import type * as rotationQueue from "../rotationQueue.js";
 import type * as teams from "../teams.js";
 import type * as vacations from "../vacations.js";
 
@@ -26,6 +27,7 @@ declare const fullApi: ApiFromModules<{
   healthCheck: typeof healthCheck;
   members: typeof members;
   onCall: typeof onCall;
+  rotationQueue: typeof rotationQueue;
   teams: typeof teams;
   vacations: typeof vacations;
 }>;
