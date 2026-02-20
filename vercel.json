@@ -1,0 +1,9 @@
+{
+  "buildCommand": "turbo build",
+  "outputDirectory": "apps/web/dist",
+  "installCommand": "bun install",
+  "framework": null,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
