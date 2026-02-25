@@ -3,6 +3,12 @@ import type { Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { internalMutation, query } from "./_generated/server";
 
+function isWeekendInMoscow(now: Date = new Date()) {
+  // Moscow stays on UTC+3 year-round, so shift from UTC and read the weekday.
+  const moscowDay = new Date(now.getTime() + 3 * 60 * 60 * 1000).getUTCDay();
+  return moscowDay === 0 || moscowDay === 6;
+}
+
 export async function isMemberOnVacation(
   ctx: { db: QueryCtx["db"] },
   memberId: Id<"members">,
@@ -71,6 +77,8 @@ export const getForTeam = query({
 
 export const advanceAllTeams = internalMutation({
   handler: async (ctx) => {
+    if (isWeekendInMoscow()) return;
+
     const teams = await ctx.db.query("teams").collect();
     for (const team of teams) {
       await advanceTeamRotation(ctx, team._id);
